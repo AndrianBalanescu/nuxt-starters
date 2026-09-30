@@ -1,0 +1,17 @@
+{
+  "suite": "nuxt-components-gallery",
+  "kind": "interactive",
+  "paths": ["/components"],
+  "baseUrl": "http://localhost:3333",
+  "timeout": 300,
+  "goal": "Test the full UI Component Gallery: verify primary, default, outline, subtle, ghost, danger, small, and large buttons. Click the busy spinner button and confirm loading animation. Test both the classless native <select> and the custom <AppSelect> search dropdown, verifying keyboard selection and dropdown positioning. Test the iOS switch toggle, checkbox, and radio buttons, ensuring two-way v-model reactivity. Adjust the Volume / Throttle range slider and observe live percentage feedback. Open the example Modal dialog, verify focus trap and backdrop dismiss. Confirm zero console errors.",
+  "checks": [
+    "all button variants render and respond to clicks",
+    "native <select> and custom <AppSelect> work seamlessly",
+    "switch toggle, checkbox, and radio inputs update reactive state",
+    "range slider updates numeric percentage in real time",
+    "modal opens, focuses, and closes on Escape and backdrop click",
+    "no console errors",
+    "no 4xx/5xx requests"
+  ]
+}

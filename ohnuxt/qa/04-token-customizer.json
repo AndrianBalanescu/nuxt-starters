@@ -1,0 +1,18 @@
+{
+  "suite": "nuxt-token-customizer",
+  "kind": "interactive",
+  "paths": ["/customizer"],
+  "baseUrl": "http://localhost:3333",
+  "timeout": 300,
+  "goal": "Verify live design token reactivity on the dedicated Customizer page: switch between Face modes (Dark / Light) and verify immediate visual update across the viewport. Switch structural themes (Neutral, Glass, Neu, Term, OLED) and accent palettes (Indigo, Ember, Forest, Mono). Adjust Radius scale (0% to 200%), Spacing scale, Chroma intensity (0% to 100%), Border width, and Shadow scale. Observe that live previews update in real time and the generated :root CSS code block reflects the exact custom properties. Test the Copy CSS button and Reset All button.",
+  "checks": [
+    "face toggle switches dark/light themes instantly",
+    "structural themes and palettes apply correct data-attributes",
+    "sliders dynamically modulate CSS custom properties",
+    "chroma intensity applies color-mix() formula",
+    "generated :root CSS code block updates live",
+    "copy CSS triggers native toast notification",
+    "no console errors",
+    "no 4xx/5xx requests"
+  ]
+}

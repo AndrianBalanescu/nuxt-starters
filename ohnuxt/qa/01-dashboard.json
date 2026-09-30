@@ -1,0 +1,17 @@
+{
+  "suite": "nuxt-dashboard",
+  "kind": "interactive",
+  "paths": ["/"],
+  "baseUrl": "http://localhost:3333",
+  "timeout": 300,
+  "goal": "Verify the Nuxt 3 System Overview dashboard: ensure the 4 KPI metric cards render with correct Pinia count, latency, and SLA values. Exercise the +1, -1, and Reset buttons and verify the count updates in real time and persists across page reloads. Test opening the Right Slide-Over Panel and Bottom Sheet Drawer, verifying backdrop blur, smooth entry/exit animations, and Escape key dismissal. Filter the synthetic probe health table using the search box and verify live filtering. Confirm zero visual glitches, zero console errors, and zero 4xx/5xx network failures.",
+  "checks": [
+    "dashboard shell and 4 KPI cards render",
+    "Pinia reactive counter updates and doubles",
+    "Right Slide-Over panel opens and closes via button, scrim, and Escape",
+    "Bottom sheet drawer opens and closes smoothly",
+    "table filtering searches probe nodes in real time",
+    "no console errors",
+    "no 4xx/5xx requests"
+  ]
+}

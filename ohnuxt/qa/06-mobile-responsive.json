@@ -1,0 +1,21 @@
+{
+  "suite": "nuxt-mobile-responsive",
+  "kind": "interactive",
+  "paths": ["/", "/components", "/customizer"],
+  "baseUrl": "http://localhost:3333",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "timeout": 300,
+  "goal": "Verify mobile viewport responsiveness (iPhone 375px width): ensure hardware notch adapts smoothly without clipping text or overlapping viewport edges. Verify the app shell main container reflows with zero horizontal scrollbar (overflow-x: hidden). Test the Bottom Sheet Drawer and Right Slide-Over on narrow screen, ensuring touch gestures/tap to close work effortlessly. Test interactive components and form controls on mobile touch targets.",
+  "checks": [
+    "zero horizontal page overflow on 375px viewport",
+    "notch remains centered and attached cleanly to top edge",
+    "responsive grid reflows to single column gracefully",
+    "slide-over panel and bottom drawer fill viewport width cleanly",
+    "touch tap targets meet minimum accessibility bounds",
+    "no console errors",
+    "no 4xx/5xx requests"
+  ]
+}

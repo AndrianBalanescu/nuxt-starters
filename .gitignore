@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Nuxt build output
+.nuxt/
+.output/
+dist/
+.cache/
+.data/
+
+# Logs & coverage
+*.log
+coverage/
+
+# Env (never commit secrets)
+.env
+.env.*
+!.env.example
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,602 @@
+# ohno v4 — LLM Agent Contract (llm.txt)
+
+> **For LLM agents generating ohno UIs.** ohno is a zero-dependency CSS+JS kit (~24KB gz).
+> Core philosophy: **semantic HTML first**. Native elements look great with **zero classes**.
+> Never invent classes. Only use the exact classes, attributes, and JS APIs below.
+
+## 0. Golden rules
+
+1. **Classless-first**: `<button>`, `<input>`, `<textarea>`, `<select>`, `<table>`,
+   `<dialog>`, `<pre><code>`, `<kbd>` get full ohno styling with **zero classes**.
+2. **Variants only**: classes are only needed when you want a variant (e.g. `.btn-primary`,
+   `.btn-danger`, `.badge`).
+3. **Never invent classes**: no `btn-xl`, `card-dark`, `text-blue`, etc.
+   If it is not in this document, it does not exist.
+4. **Include order**:
+   ```html
+   <link rel="stylesheet" href="css/tokens.css">
+   <link rel="stylesheet" href="css/base.css">
+   <link rel="stylesheet" href="css/components.css">
+   <!-- before </body> -->
+   <script src="js/ohno.js"></script>
+   ```
+   Minified equivalents built by `js/build/build.sh`: `css/tokens.min.css`,
+   `css/base.min.css`, `css/components.min.css`, `js/ohno.min.js` — same
+   include order, load the `.min` files when you ship.
+5. **No icon fonts**: use emoji or inline SVG.
+6. **No other CSS frameworks**: ohno is self-contained.
+7. **No flash of wrong theme (FOUC)**: if you offer theme/face switching, put
+   this one-liner in `<head>` **before the stylesheets** so a saved face applies
+   at first paint. Light is a **face** (`data-look`), so an OS light preference
+   sets `data-look="light"` on the dark base — never `data-theme="light"`:
+   ```html
+   <script>try{var t=localStorage["ohno-theme"];if(t)document.documentElement.dataset.theme=t;if(matchMedia("(prefers-color-scheme: light)").matches&&!t)document.documentElement.dataset.look="light"}catch(e){}</script>
+   ```
+8. **Icon SVGs**: inline `<svg>` icons should carry explicit `width`/`height`
+   attributes (e.g. `width="16" height="16"`). If an svg has neither attribute,
+   ohno's guard (`svg:where(:not([width]):not([height]))` in `base.css`) defaults
+   it to `1em` (icon scale) instead of stretching to container width. Larger
+   artwork (illustrations, charts) must be sized via attributes or your own CSS —
+   author rules always win because the guard has zero specificity.
+9. **Status & accent foreground contract**: raw tokens (`--o-green`, `--o-yellow`,
+   `--o-red`, `--o-blue`, `--o-orange`, `--o-accent`) are for fills, borders,
+   dots and soft backgrounds. For TEXT (badges, errors, toasts, or your own
+   status text) always use the semantic foreground tokens: `--o-green-text`,
+   `--o-yellow-text`, `--o-red-text`, `--o-blue-text`, `--o-orange-text`,
+   `--o-accent-text`. Dark themes alias them to the raw vivid values; every
+   light face (`light`, `neu`, `glass light-look`, `term light-look`,
+   `oled light-look`) derives them toward `--o-text` via `color-mix()` so text
+   stays ≥4.5:1 (WCAG 2.2 AA) on every surface, including inside soft pills.
+   Never hardcode a raw status token as text color on a light surface.
+
+---
+
+## 1. Classless reference (zero classes)
+
+Write standard HTML. These elements are styled out of the box:
+
+| Element | Default styling & behavior |
+|---|---|
+| `<button>` | Ohno button (default surface, hover/active elevation, `:disabled` opacity). |
+| `<input>` | Text, email, password, search, url, tel, number, or no type: styled input field. |
+| `<textarea>` | Resizable multi-line text input with matching focus ring. |
+| `<select>` | Pre-JS: custom SVG chevron select; JS: auto-hydrated into searchable combobox. |
+| `<table>` | Sticky uppercase header, zebra row hover, tabular numbers font. |
+| `<dialog>` | Native top-layer modal, blurred backdrop, @starting-style fade-in. |
+| `<pre><code>` | Styled code panel; JS auto-injects header bar with language chip + **Copy** button. |
+| `<kbd>` | Keyboard shortcut chip (e.g. `<kbd>⌘K</kbd>`). |
+| `<mark>` | Highlight: `--o-yellow-soft` wash + `--o-text`, AA contrast in every theme (never UA yellow). |
+| `<details>/<summary>` | Disclosure panel (zero JS): bordered surface, hover state, rotating border-chevron (forced-colors safe), padded body. Use bare `<details>` with a `<summary>` first child — no classes needed. |
+| `<progress>` / `<meter>` | Native bar (zero JS): accent fill on a surface-3 track, 8px pill. `<meter>` recolors by value state vs `optimum`/`low`/`high` (green/yellow/red). Bare element, optional `value`/`max` — no classes needed. Indeterminate `<progress>` shows an accent sweep. |
+
+> Checkboxes, radios, switches and sliders need their wrapper classes — see
+> Form controls in the next section.
+
+---
+
+## 2. Variant & component classes
+
+Use classes **only** when selecting a variant or using a non-native component:
+
+### Buttons
+- Base: `<button>` (no class needed)
+- Variants **stack on the base class**: `class="btn btn-primary"` —
+  the base class is required on classed buttons; bare `<button>` = default style.
+  - `.btn-primary` — accent filled
+  - `.btn-subtle` — subtle surface
+  - `.btn-ghost` — transparent
+  - `.btn-danger` — destructive red
+  - `.btn-icon` — icon-only square (combine: `btn btn-icon`)
+  - `.btn-sm`, `.btn-lg` — size variants
+  - `.is-loading` (JS or `OHNO.loading(el, true)`) — busy spinner
+- Button group: `.btn-group` joins adjacent buttons into a connected row (`<div class="btn-group"><button class="btn">Day</button><button class="btn">Week</button></div>`).
+- **Accessibility (required)**: icon-only buttons (`btn btn-icon`, `✕`/`☾`/`⟨` glyphs) MUST carry
+  `aria-label="Close"` etc. — a visual tooltip (`data-tip`) is not an accessible name. Form
+  controls with placeholder-only labels MUST get `aria-label` (placeholders are not names).
+
+### Form controls
+- `.input`: opt-in class for inputs (only needed if input already has other classes).
+- `.textarea`: opt-in class for textareas.
+- Checkbox: `<input type="checkbox">` (classless) or `<label class="check"><input type="checkbox"><span class="check-box"></span> Label</label>`
+- Radio: `<input type="radio" name="x">` (classless) or `<label class="radio"><input type="radio" name="x"><span class="radio-dot"></span> Label</label>`
+- Switch toggle: `<input type="checkbox" role="switch">` (classless) or `<label class="switch"><input type="checkbox"><span class="switch-track"></span></label>`
+- Range slider: `<input type="range" min="0" max="100">` (classless) or `<input type="range" class="range">`
+- Select / Dropdown: `<select>` (classless) or `<select data-select>` (interactive combobox).
+- Input sizes: `.input-sm`, `.input-lg` on `<input class="input input-sm">`.
+- Field anatomy:
+  - `.field`: vertical field container stacking label, input, and feedback.
+  - `.label`: field label (`<label class="label">Label <span>optional</span></label>`).
+  - `.hint`: subtle caption text below an input (`<span class="hint">Assistive text</span>`).
+  - `.error`: validation error message below an input (`<span class="error">Required field</span>`).
+- Input adorned with icons or clear action:
+  - `.input-box`: relative wrapper for inputs with icons or clear button.
+  - `.icon-left`, `.icon-right`: icon placement slots inside `.input-box`.
+  - `.input-clear`: clear button inside `.input-box`.
+- Shortcut chip: `.kbd` or bare `<kbd>` for keyboard shortcut indicators (`<span class="kbd">⌘K</span>`).
+
+### Layout & Containers
+- `.card`: container card with surface background, border, and padding.
+- `.table-wrap`: scroll wrapper for `<table>` (enables horizontal scroll + sticky header).
+- `.row`: horizontal flex container with standard gap.
+- `.col`: vertical flex container with standard gap.
+- `.grow`: flex-grow helper (`flex: 1`).
+- `.card-header`: header row with space-between alignment inside `.card`.
+- Responsive grids: `.grid-2`, `.grid-3`, `.grid-4` (2/3/4-column responsive grid layouts).
+- Text utilities: `.caption` (small muted text), `.truncate` (single-line ellipsis overflow).
+- Empty states: `.empty` centered placeholder container with `.empty-icon` icon tile (`<div class="empty"><div class="empty-icon">📭</div><p>No records</p></div>`).
+
+### Badges, Chips & Avatars
+- `.badge`: small pill (`<span class="badge">v1.0</span>`).
+  - Variants: `.badge-accent`, `.badge-success`, `.badge-danger`, `.badge-warning`, `.badge-info`.
+  - `badge-accent` text color is AA-tuned per theme via `--o-accent-text`
+    (keeps ≥4.5:1 on the accent-soft pill in every theme).
+- `.chip`: removable token (`<span class="chip">Tag <button type="button" class="chip-remove">×</button></span>`).
+- `.avatar`: circle avatar (`<img class="avatar" src="…" alt="…">`).
+- `.skeleton`: shimmer placeholder block.
+- `.progress` > `.progress-bar`: `<div class="progress"><div class="progress-bar" style="width: 60%"></div></div>`.
+  - Status dot: `<span class="badge-dot"></span>` inside `.badge` for live state dots.
+    `badge-dot` is ONLY a child: `<span class="badge badge-success"><span class="badge-dot"></span>active</span>`.
+    Never apply `badge-dot` to the `.badge` element itself (it would collapse the pill).
+    Full status pill pattern: `<span class="badge badge-success"><span class="badge-dot"></span>text</span>`.
+- Avatar sizes: `.avatar-sm` (22px), `.avatar-lg` (38px).
+- Color swatch: `.swatch` inline preview chip (`<span class="swatch" style="--swatch:#6366f1"></span>`).
+
+### Navigation & Overlays
+- `.tabs`: tabs wrapper (see Declarative behaviors below).
+- `.tab`: tab button inside `.tabs`.
+- `.dropdown`: dropdown wrapper.
+- `.menu`: dropdown menu container.
+- `.menu-item`: clickable row inside `.menu`.
+- `.palette`: Raycast-style command palette dialog (`<dialog class="palette">`).
+- Tab pill variant: `.tabs-pills` on tabs container (`<div class="tabs tabs-pills" data-tabs>`).
+- Dropdown menu helpers:
+  - `.menu-header`: group title header inside `.menu`.
+  - `.menu-divider`: horizontal rule separator inside `.menu`.
+  - `.menu-right`: right-aligned menu position (`<div class="menu menu-right">`).
+- Native Popover:
+  - `.popover`: top-layer popover surface (`<div id="info" popover class="popover">`).
+  - `.pop-wrap`: relative wrapper for inline popovers in legacy fallback contexts.
+- Tooltip:
+  - `.tooltip`: floating tooltip mounted by runtime on `[data-tip]` hover.
+- Command palette anatomy:
+  - Container: `<dialog class="palette" id="palette">`
+  - Search: `<div class="palette-search"><span>⌕</span><input class="palette-input" placeholder="Type a command..."><span class="kbd">esc</span></div>`
+  - Results list: `<div class="palette-list">`
+    - Section: `<div class="palette-section">Category</div>`
+    - Item: `<div class="palette-item">Action <span class="palette-sub">⌘K</span></div>`
+    - Empty state: `<div class="palette-empty">No results found</div>`
+  - Footer: `<div class="palette-footer"><div class="palette-keys"><kbd class="kbd">esc</kbd> close</div></div>`
+
+---
+
+## 3. Declarative behaviors (data-attributes)
+
+No JavaScript wiring needed — the runtime discovers these automatically:
+
+### Actions
+Any element with `data-action` fires a framework behavior on click (delegated, works on dynamically-added elements). Custom `data-action` values are ignored by the runtime and free for app code.
+
+| Attribute | Behavior |
+|---|---|
+| `data-action="theme-toggle"` | Toggle dark ↔ light |
+| `data-action="theme-set" data-value="light"` | Set theme to `light`/`dark` |
+| `data-action="palette" data-value="ember"` | Set palette (`indigo`/`ember`/`forest`/`mono`) |
+| `data-action="contrast" data-value="high"` | Set contrast (`low`/`med`/`high`) |
+| `data-action="density" data-value="dense"` | Set density (`dense`/`regular`/`large`) |
+| `data-action="toast" data-toast="Message" data-type="success"` | Show toast (type: `info` default, `success`, `error`, `warning`) |
+
+```html
+<button data-action="theme-toggle">🌗 Theme</button>
+<button data-action="palette" data-value="ember">Ember</button>
+<button data-action="density" data-value="dense">Compact</button>
+<button data-action="toast" data-toast="Saved" data-type="success">Save</button>
+```
+
+### Modals & Dialogs
+- Open a modal: `<button data-modal-open="#my-dialog">Open</button>`
+- Close from inside: `<button data-modal-close>Cancel</button>`
+- Backdrop click and `Esc` key close the modal automatically.
+- Modal class: `<dialog class="modal">` provides the standard modal container.
+- Modal title: `.modal-title` sets standardized title typography (`<div class="modal-title">Title</div>`).
+- Confirm dialog: `<dialog class="modal dialog" role="alertdialog">` for alert prompts.
+  - `.dialog-icon`: rounded icon container inside `.dialog`.
+
+### Tabs
+```html
+<div class="tabs" data-tabs>
+  <button class="tab is-active" data-tab="tab1">Overview</button>
+  <button class="tab" data-tab="tab2">Settings</button>
+</div>
+<div data-panel="tab1">Overview content…</div>
+<div data-panel="tab2" hidden>Settings content…</div>
+```
+- By default panels must share the tab group's parent element.
+- Custom container: add `data-tabs-scope="#panel-container"` to `.tabs`.
+
+### Dropdowns
+```html
+<div class="dropdown" data-dropdown>
+  <button type="button">Options ▾</button>
+  <div class="menu">
+    <button class="menu-item" type="button">Edit</button>
+    <button class="menu-item" type="button">Delete</button>
+  </div>
+</div>
+```
+
+### Table sorting
+Add `data-sort` to any `<th>`:
+```html
+<table>
+  <thead>
+    <tr>
+      <th data-sort>Name</th>
+      <th data-sort>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>…</tbody>
+</table>
+```
+- Clicking header toggles sort (asc/desc), sets `.is-sorted` and `data-dir`.
+- Works on classless `<table>` too (sorting upgrades automatically).
+- Live filter: `<input data-table-filter="#table-id">` anywhere on the page
+  filters rows of that table as you type (skips `.table-empty-row`).
+- Table anatomy classes:
+  - `.table`: opt-in class on `<table>` element.
+  - `.table-card`: card wrapper enclosing toolbar, scroll wrapper, and table.
+  - `.table-toolbar`: flex toolbar for search inputs and bulk action buttons.
+  - `.table-empty-row`: full-width empty row placeholder (`<tr class="table-empty-row"><td colspan="3">No records</td></tr>`).
+
+### Code blocks with Copy
+```html
+<!-- Classless (auto-upgraded by JS with bar + Copy button) -->
+<pre data-lang="javascript"><code>console.log("hello");</code></pre>
+
+<!-- Or with explicit class -->
+<pre class="code" data-lang="bash"><code>npm install ohno</code></pre>
+```
+
+### Sidebar & Mobile drawer
+- Desktop toggle: `<button data-sidebar-toggle="#sidebar">Toggle</button>`
+- Mobile drawer: `<button data-drawer="#sidebar">Menu</button>`
+- App shell anatomy:
+  ```html
+  <div class="shell">
+    <div class="mobile-backdrop"></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">F</div>
+        <div class="sidebar-label">App</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section">Main</div>
+        <a class="nav-item is-active" href="#home">
+          <span class="sidebar-label">Home</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user-meta">User profile</div>
+      </div>
+    </aside>
+    <main class="content">
+      <button class="mobile-toggle" data-drawer="#sidebar">Menu</button>
+      <!-- Main content -->
+    </main>
+  </div>
+  ```
+- Drawer and collapse behavior:
+  - Mobile toggle opens `.sidebar.is-open` and shows `.mobile-backdrop.is-open`.
+  - While open on mobile, `ohno.js` sets `.drawer-lock` on `<html>` to disable page scrolling.
+  - Desktop toggle sets `.is-collapsed` on `.sidebar`, collapsing to 60px and hiding `.sidebar-label`, `.sidebar-section`, and `.sidebar-user-meta`.
+
+### Popovers & Tooltips
+- Native popover:
+  ```html
+  <button popovertarget="info-pop">Info</button>
+  <div id="info-pop" popover class="popover">Popover details</div>
+  ```
+- Tooltip hover hints:
+  ```html
+  <button data-tip="Action hint" data-pos="top">Button</button>
+  ```
+  Positioning supports `data-pos="top"`, `"bottom"`, `"left"`, or `"right"` (defaults to `"top"`).
+  The runtime computes deterministic positioning with automatic viewport flipping and boundary clamping.
+  Tooltips automatically dismiss on click, pointerdown, Escape key, or scroll to prevent lingering.
+
+### Select / Combobox
+Upgrade native `<select>` elements with `data-select` (and optional `data-multiple`):
+```html
+<select class="select" data-select>
+  <option value="1">Option 1</option>
+  <option value="2">Option 2</option>
+</select>
+```
+
+### JS-generated internals (do not hand-write)
+These classes are generated dynamically by `ohno.js` at runtime. Agents should not hand-write them in static HTML, but may style or inspect them:
+- Code copy: `.code-bar`, `.code-lang`, `.code-copy` injected into `<pre><code>`.
+- Select dropdown: `.select`, `.select-trigger`, `.select-label`, `.select-panel`, `.select-search`, `.select-list`, `.select-option`, `.select-empty`, and upward collision modifier `.select--up`.
+- Toasts: `.toast-container`, `.toast`, `.toast-icon`, `.toast-close`, and type modifiers `.toast-info`, `.toast-success`, `.toast-warning`, `.toast-error`.
+- Notch: `nav.ohno-notch`, `.notch-btn`, `.notch-sep`, `.notch-pop-wrap`, `.ohno-notch-pop` injected when `<html data-notch>`.
+
+### Notch (opt-in quick bar)
+When `<html data-notch>` is set, ohno.js injects a fixed top-center pill: home link · appearance popover · ⌘K search (if a palette exists) · any items from `template[data-notch-items]`. Extension points:
+
+```html
+<html lang="en" data-notch data-notch-home="/docs">
+  <body>
+    <!-- custom buttons inside the pill (loaded before ohno.js) -->
+    <template data-notch-items>
+      <a class="notch-btn" href="/docs" aria-label="Docs" data-tip="Docs">▤</a>
+      <button class="notch-btn" data-action="toast" data-toast="Hi" data-tip="Say hi">👋</button>
+    </template>
+    <script src="ohno.js"></script>
+  </body>
+</html>
+```
+
+- `data-notch-home` — href of the built-in home link (default `/`).
+- `template[data-notch-items]` — clone its children into the pill (before ohno.js runs). Icon goes in the element's text/SVG content; `data-tip` and `data-action` work as everywhere else.
+
+---
+
+## 4. JavaScript API (`window.OHNO`)
+
+Injected by `ohno.js` on `DOMContentLoaded`:
+
+```javascript
+// 1. Toasts (message, type, opts)
+// type: "info" (default) | "success" | "error" | "warning"
+OHNO.toast("Project saved", "success");
+OHNO.toast("Failed to connect", "error", { duration: 5000 }); // 0 = persistent
+
+// 2. Modals
+OHNO.openModal("#my-dialog", { title: "Accessible Title" });
+OHNO.closeModal(); // closes current or pass dialog element
+
+// 3. Loading state on any element (adds .is-loading, aria-busy, disables button)
+OHNO.loading(myButton, true);
+OHNO.loading(myButton, false);
+
+// 4. Theme & Face & Palette
+// Themes: dark | glass | neu | term | oled  →  <html data-theme="term">
+// neutral is the base identity. DARK AND LIGHT ARE FACES, NOT THEMES — the
+// neutral light surface ships as data-look="light" on the neutral base.
+// EVERY theme has a light and a dark face. data-look picks the face:
+//   <html data-theme="neutral" data-look="light"> neutral light
+//   <html data-theme="glass" data-look="light">  frosted daylight
+//   <html data-theme="glass">                    frosted dark (default)
+//   <html data-theme="neu"   data-look="dark">   charcoal clay
+//   <html data-theme="term"  data-look="light">  phosphor on paper
+//   <html data-theme="oled"  data-look="light">  paper white
+// neu is light-identity; every other theme defaults to the dark face.
+// "dark" is not a theme choice; use data-look="dark" on neutral if you want
+// to state the face explicitly.
+// Palettes apply on every theme AND every look — the PALETTES section ships
+// look-aware pairs ([data-theme="term"][data-look="light"][data-palette=…])
+// so the accent wins the cascade on flipped faces too. Copy a pair when you
+// add a palette with flipped faces.
+// term identity: the phosphor color IS --o-accent. Text ramp, borders and
+// the switch knob all derive from the accent, so palettes retheme the whole
+// terminal (indigo/blue, ember = classic amber CRT, forest, mono).
+OHNO.theme.get();                          // "dark" | "glass" | "neu" | "term" | "oled"
+OHNO.theme.set("term");                    // structural themes only; "light" is NOT a theme
+OHNO.theme.setLook("light");               // light/dark FACE on the current theme (persists)
+OHNO.theme.getLook();                      // "light" | "dark" (current face of the theme)
+OHNO.theme.toggle();                       // flips the FACE light <-> dark
+OHNO.theme.toggleLook();                   // flips to the opposite face
+OHNO.theme.getPalette();                   // "indigo" | "ember" | "forest" | "mono" | app-defined
+OHNO.theme.setPalette("ember");            // updates data-palette on <html>; custom names allowed
+OHNO.theme.setContrast("high");            // "low" | "med" | "high"
+OHNO.theme.getContrast();                  // "low" | "med" | "high"
+OHNO.theme.setDensity("dense");            // "dense" | "regular" | "large" (persists)
+OHNO.theme.getDensity();                   // current density, "regular" default
+
+// 4b. Fonts — custom UI/mono fonts (Google Fonts or any webfont)
+// 1) load the font in <head>:
+//    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+// 2) wire it (persists to localStorage, fires "ohno:themechange"):
+OHNO.fonts.set({ ui: '"Inter", sans-serif' });                       // UI font only
+OHNO.fonts.set({ mono: '"JetBrains Mono", monospace' });             // mono only (merges — keeps ui)
+OHNO.fonts.set({ ui: '"Bricolage Grotesque", sans-serif', mono: '"JetBrains Mono", monospace' });
+OHNO.fonts.get();                          // { ui?, mono? } currently persisted
+OHNO.fonts.reset();                        // back to theme defaults (removes key)
+// set() merges with the current choice — an omitted axis keeps its value.
+// reset() clears both axes at once.
+
+// 5. Re-scan after DOM changes (SPA route change, Turbo/htmx swap)
+// OHNO.scan(root) — same as init(); the name signals progressive re-scan.
+// Initializes any new ohno components inside `root` (default: whole document).
+// Safe to call repeatedly; already-initialized elements are skipped.
+OHNO.scan(document.body);            // after injecting new markup
+OHNO.scan();                         // full-document re-scan
+
+// 6. Notch (only when <html data-notch>): add a button to the pill at runtime
+OHNO.notch.add({ label: "⌘", title: "Search", action: "toast" });      // returns the element
+OHNO.notch.add({ icon: "<svg …>", href: "/docs", title: "Docs" });     // link instead of button
+// keys: label (textContent) | icon (innerHTML — trusted) | href | title (data-tip)
+//       | action ("toast"/"modal-open"/… string OR click function)
+OHNO.notch.el;                               // the injected nav.ohno-notch
+
+// 7. Theme change event
+document.addEventListener("ohno:themechange", (e) => {
+  console.log(e.detail); // { theme, palette, contrast, density }
+});
+```
+
+---
+
+## 5. Recipes for LLM agents
+
+### Clean form (zero classes except primary button)
+```html
+<form id="contact-form">
+  <label for="name">Name</label>
+  <input id="name" type="text" placeholder="Ada Lovelace" required>
+
+  <label for="topic">Topic</label>
+  <select id="topic">
+    <option value="support">Support</option>
+    <option value="sales">Sales</option>
+  </select>
+
+  <label for="message">Message</label>
+  <textarea id="message" rows="4" placeholder="Your message…"></textarea>
+
+  <div class="row">
+    <button type="submit" class="btn btn-primary">Send</button>
+    <button type="reset">Clear</button>
+  </div>
+</form>
+```
+
+### Data table (zero classes)
+```html
+<table>
+  <thead>
+    <tr>
+      <th data-sort>Name</th>
+      <th data-sort>Role</th>
+      <th data-sort>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ada</td>
+      <td>admin</td>
+      <td><span class="badge badge-success">active</span></td>
+      <td><button class="btn btn-sm btn-outline">Edit</button></td>
+    </tr>
+    <tr>
+      <td>Alan</td>
+      <td>editor</td>
+      <td><span class="badge badge-warning">trial</span></td>
+      <td><button class="btn btn-sm btn-outline">Edit</button></td>
+    </tr>
+  </tbody>
+</table>
+```
+Wrap in `.table-card` + `.table-toolbar` when you want the search/bulk toolbar; add
+`<tr class="table-empty-row"><td colspan="4">No records</td></tr>` for the empty state.
+
+### Token Customizer
+`demos/11-customizer` is a focused live playground for every styling control in
+this contract: themes, palettes, light/dark face, contrast, density, colors,
+fonts, type/spacing scales, radius, border width (`--o-bw`) and shadows.
+
+- Every change applies directly to real kit components on the page (no iframe,
+  fake page builder or separate render pipeline).
+- "Copy CSS" exports only the active reusable `:root { --o-* }` overrides.
+- Selecting a stock palette clears stale manual accent overrides so the palette
+  always wins; the intensity slider re-resolves against the current palette.
+- State persists in `localStorage` under `ohno-customizer`; Reset clears custom
+  state plus all `ohno-*` theme/font preferences.
+
+### Calendar month (zero classes, zero JS)
+A month view is a data table + a native date input — no ARIA grid, no JS.
+Weeks start Monday; leading/trailing blanks are **real empty `<td>`s**.
+Demo: `demos/12-calendar`.
+```html
+<table>
+  <caption>Sep 2026</caption>
+  <thead>
+    <tr><th scope="col" abbr="Monday">Mon</th>…<th scope="col" abbr="Sunday">Sun</th></tr>
+  </thead>
+  <tbody>
+    <tr><td></td><td>1</td><td>2</td>…<td>6</td></tr>
+    <tr><td>7</td><td>8</td>…</tr> <!-- 7 = today -->
+  </tbody>
+</table>
+
+<label for="d">Pick a date</label>
+<input id="d" type="date" value="2026-09-21">
+```
+State model (CSS can only see "cell is empty" — that is the honest limit):
+- weekend columns: `td:nth-child(6)` / `td:nth-child(7)` (survives leading blanks);
+- outside-month cells: real empty `<td>` + `td:empty`;
+- today / milestone day: wrap the number in `<mark>` (AA-styled by the kit);
+- the table is read-only illustration; CSS cannot sync cell → input. The
+  `<input type="date">` is the interactive half (keyboard, localized, OS picker;
+  Safari renders a text field, value format stays `YYYY-MM-DD`).
+
+### Card & tag list (no custom elements, no card classes)
+Cards are `<article>` (or `<section>`), tag/chip lists are `<ul><li>` styled by
+element selectors. Do **not** invent `<card>`/`<tags>` custom elements — no
+classless kit does, they render `display:inline` without JS registration, and
+`<article>`/`<section>` give free landmarks. Demo: `demos/12-calendar` side rail.
+```html
+<article class="card">
+  <h2>Title</h2>
+  <p>Body copy…</p>
+  <ul class="row" style="list-style:none; padding:0; margin:0">
+    <li><span class="badge">css</span></li>
+    <li><span class="badge badge-success">shipped</span></li>
+  </ul>
+</article>
+```
+
+### Modal confirmation
+```html
+<button data-modal-open="#delete-modal" class="btn-danger">Delete</button>
+
+<dialog id="delete-modal">
+  <div class="modal-header">
+    <h2>Confirm Deletion</h2>
+    <button data-modal-close aria-label="Close">×</button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure? This action cannot be undone.</p>
+  </div>
+  <div class="modal-footer">
+    <button data-modal-close>Cancel</button>
+    <button class="btn btn-danger" id="confirm-btn">Confirm</button>
+  </div>
+</dialog>
+```
+
+### Disclosure / accordion (zero classes, zero JS)
+Bare `<details>` gets a panel with border, hover, and an animated chevron.
+Stack them for an accordion. `<summary>` must be the first child.
+```html
+<details open>
+  <summary>What is ohno?</summary>
+  <p>A classless-first semantic HTML kit.</p>
+</details>
+<details>
+  <summary>Second item</summary>
+  <p>More copy.</p>
+</details>
+```
+
+### Breadcrumb (zero CSS, semantic nav)
+`<nav>` + `<ol>`, current page via `aria-current="page"` (not a link).
+Style the separators in your own CSS if you want them; the markup is the contract.
+```html
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/library">Library</a></li>
+    <li><span aria-current="page">Data</span></li>
+  </ol>
+</nav>
+```
+
+### Pagination (zero CSS, semantic nav)
+`<nav>` + `<ul>` of links; `aria-current="page"` on the current page;
+`aria-label` on prev/next arrows. Do **not** invent `.pagination` classes.
+```html
+<nav aria-label="Pagination">
+  <ul>
+    <li><a href="?page=1" aria-label="Previous">←</a></li>
+    <li><a href="?page=1">1</a></li>
+    <li><a href="?page=2" aria-current="page">2</a></li>
+    <li><a href="?page=3">3</a></li>
+    <li><a href="?page=3" aria-label="Next">→</a></li>
+  </ul>
+</nav>
+```
+
+---
+*ohno v4 · Zero dependencies · Classless-first · Zero build*

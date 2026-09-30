@@ -1,0 +1,173 @@
+# Nuxt Minimal — LLM Agent Contract (llm.txt)
+
+> **For LLM agents generating Nuxt + UnoCSS + Pinia UIs.**
+> This starter is a lean, zero-bloat Nuxt 3 boilerplate. Follow the rules below strictly.
+
+## 0. Golden Rules
+
+1. **Utility-First CSS:** Use UnoCSS utility classes. Never write custom CSS unless absolutely necessary (e.g., global resets, complex keyframe animations).
+2. **No Tailwind Classes:** This project uses **UnoCSS**, not Tailwind. UnoCSS is compatible with most Tailwind syntax, but respect UnoCSS-specific features (attributify, icons, shortcuts).
+3. **Icons:** Use `<i class="i-lucide-<name>" />` for all icons. Do not use `<svg>` inline unless the icon is custom.
+4. **State Management:** Use Pinia stores from `stores/`. Never use Vuex or local state for shared data.
+5. **TypeScript:** All Vue SFCs must use `<script setup lang="ts">`.
+6. **No Extra Dependencies:** Do not add new UI libraries (e.g., Headless UI, Vuetify). Style with UnoCSS utilities only.
+7. **Single-Page Default:** The starter uses `app.vue`. If multi-route is needed, create `pages/` directory and add routes via `vue-router`.
+
+## 1. Styling (UnoCSS)
+
+### Presets Enabled
+- `presetUno` — Standard utilities (flexbox, colors, spacing, typography)
+- `presetAttributify` — Class-less utilities via attributes (e.g., `<div bg="red/10 text=white">`)
+- `presetIcons` — Icon utilities (e.g., `<i class="i-lucide-plus" />`)
+- `presetWebFonts` — Google Fonts (Inter, Fira Code)
+
+### Custom Shortcuts
+Defined in `uno.config.ts`:
+- `btn` — Base button layout
+- `btn-primary` — Emerald primary variant
+- `btn-secondary` — Neutral secondary variant
+- `card` — Rounded panel with backdrop blur
+
+### Example: Button
+```vue
+<button class="btn-primary">
+  <i class="i-lucide-plus" />
+  Add Item
+</button>
+```
+
+### Example: Card
+```vue
+<div class="card p-4">
+  <h2 class="text-lg font-semibold text-neutral-200">Card Title</h2>
+  <p class="text-sm text-neutral-400">Card content</p>
+</div>
+```
+
+### Example: Attributify
+```vue
+<div bg="neutral-900/60 text=white p=4 rounded=xl">
+  Styled via attributes, not classes
+</div>
+```
+
+## 2. State (Pinia)
+
+### Store Pattern
+```ts
+// stores/example.ts
+export const useExampleStore = defineStore('example', () => {
+  const items = ref<string[]>([])
+  function addItem(value: string) {
+    items.value.push(value)
+  }
+  return { items, addItem }
+})
+```
+
+### Usage in Components
+```vue
+<script setup lang="ts">
+const store = useExampleStore()
+</script>
+
+<template>
+  <ul>
+    <li v-for="item in store.items" :key="item">{{ item }}</li>
+  </ul>
+  <button class="btn-primary" @click="store.addItem('New')">
+    Add
+  </button>
+</template>
+```
+
+## 3. Icons (Lucide)
+
+Use the `<i>` tag with `i-lucide-<name>` classes.
+
+### Examples
+```vue
+<i class="i-lucide-plus" />       <!-- Plus icon -->
+<i class="i-lucide-x" />          <!-- Close icon -->
+<i class="i-lucide-settings" />   <!-- Settings icon -->
+```
+
+### Sizing & Color
+```vue
+<i class="i-lucide-plus text-lg text-emerald-400" />
+```
+
+## 4. Routing (Optional)
+
+If multi-route is needed:
+1. Create `pages/` directory.
+2. Add `.vue` files (e.g., `pages/about.vue`).
+3. Routes are auto-generated via `vue-router`.
+
+### Example: `pages/about.vue`
+```vue
+<template>
+  <div class="p-6">
+    <h1 class="text-2xl font-bold">About</h1>
+    <NuxtLink to="/" class="text-emerald-400">← Home</NuxtLink>
+  </div>
+</template>
+```
+
+## 5. Common Patterns
+
+### Form Input
+```vue
+<input
+  v-model="name"
+  type="text"
+  placeholder="Your name"
+  class="px-4 py-2 rounded-lg bg-neutral-900 border border-neutral-800 text-white focus:outline-none focus:border-emerald-500"
+/>
+```
+
+### Modal
+```vue
+<dialog class="p-6 rounded-xl bg-neutral-900 border border-neutral-800">
+  <h2 class="text-lg font-semibold mb-4">Title</h2>
+  <p>Content</p>
+  <button class="btn-secondary mt-4" @click="dialog.close()">Close</button>
+</dialog>
+```
+
+### Table
+```vue
+<table class="w-full text-sm">
+  <thead>
+    <tr class="text-left text-neutral-500 border-b border-neutral-800">
+      <th class="py-2">Name</th>
+      <th class="py-2">Role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="border-b border-neutral-900 hover:bg-neutral-900/50">
+      <td class="py-2 text-white">John</td>
+      <td class="py-2 text-neutral-400">Admin</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+## 6. Constraints
+
+- **No CSS Frameworks:** UnoCSS only. No Tailwind, Bootstrap, or custom CSS files.
+- **No UI Libraries:** No Vuetify, Quasar, or Headless UI.
+- **No Global Styles:** Use `<style>` only for global resets (e.g., `body { margin: 0; }`).
+- **No Custom Directives:** Use standard Vue directives (`v-if`, `v-for`, `v-model`).
+- **No Server-Side Rendering (SSR) Issues:** Ensure components are SSR-safe (no `window`/`document` in setup without `onMounted`).
+
+## 7. Validation Checklist
+
+Before submitting code, verify:
+- [ ] All classes are valid UnoCSS utilities or shortcuts.
+- [ ] All icons use `i-lucide-*` format.
+- [ ] All state is in Pinia stores (if shared).
+- [ ] All SFCs use `<script setup lang="ts">`.
+- [ ] No custom CSS unless necessary.
+- [ ] No new dependencies added.
+- [ ] Build passes: `bun build`.

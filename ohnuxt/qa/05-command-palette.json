@@ -1,0 +1,18 @@
+{
+  "suite": "nuxt-command-palette",
+  "kind": "interactive",
+  "paths": ["/"],
+  "baseUrl": "http://localhost:3333",
+  "timeout": 300,
+  "goal": "Test the Raycast-style ⌘K Command Palette: open via keyboard shortcut (Cmd+K or Ctrl+K) and via the Notch search button. Type search queries to filter commands across Appearance, Palette, Navigation, State, and Actions. Use ArrowUp and ArrowDown keys to navigate items and Enter to execute an action (e.g. Toggle Face, Increment Pinia Counter, Navigate to Customizer). Verify keyboard hints at bottom, and verify clean dismissal via Escape key and clicking outside the modal.",
+  "checks": [
+    "palette opens via Cmd/Ctrl+K and Notch button",
+    "search query filters action list with instant debounce",
+    "ArrowUp, ArrowDown, and Enter execute selected action",
+    "Pinia actions (+1, reset) dispatch and update state",
+    "Navigation actions route cleanly across pages",
+    "Escape and backdrop click dismiss overlay",
+    "no console errors",
+    "no 4xx/5xx requests"
+  ]
+}
