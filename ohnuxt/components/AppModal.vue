@@ -29,6 +29,8 @@ function handleConfirm() {
   <dialog 
     ref="modalRef" 
     class="modal-dialog" 
+    aria-labelledby="demo-modal-title"
+    aria-modal="true"
     @cancel="close"
     @click.self="close"
   >
@@ -37,7 +39,7 @@ function handleConfirm() {
       <header class="modal-header">
         <div class="modal-title-row">
           <span class="modal-icon">⚡</span>
-          <h3 class="modal-title">Nuxt 3 + ohno Starter</h3>
+          <h3 id="demo-modal-title" class="modal-title">Nuxt 3 + ohno Starter</h3>
         </div>
         <button class="btn btn-ghost btn-icon btn-sm" @click="close" aria-label="Close modal">✕</button>
       </header>

@@ -213,18 +213,18 @@ onUnmounted(() => {
 
 .select-item:hover:not(:disabled) {
   background: var(--o-surface-2);
-  color: var(--o-accent);
+  color: var(--o-accent-text);
 }
 
 .select-item.is-selected {
   background: var(--o-accent-soft, rgba(113, 116, 212, 0.15));
-  color: var(--o-accent);
+  color: var(--o-accent-text);
   font-weight: 600;
 }
 
 .select-check {
   font-size: 12px;
-  color: var(--o-accent);
+  color: var(--o-accent-text);
   font-weight: 700;
 }
 </style>

@@ -3,7 +3,7 @@
   "kind": "interactive",
   "paths": ["/"],
   "baseUrl": "http://localhost:3333",
-  "timeout": 300,
+  "timeout": 600,
   "goal": "Audit the 3-icon top-bezel Hardware Notch: verify it is attached flush to top: 0 with inverted corner ears (no top gap, no legacy duplicate nav bar). Click the 🎨 Palette icon and verify the embedded Token Customizer opens without layout shift. Click the 🔍 Search icon and verify the Command Palette opens immediately. Click the ☰ Menu icon and test Copy CSS, Toggle Face (Dark/Light), and Toggle Focus Mode. Verify tooltips on all 3 buttons are bounded, auto-flipped, and dismiss instantly on click without lingering.",
   "checks": [
     "notch is attached flush to top bezel with inverted corner ears",

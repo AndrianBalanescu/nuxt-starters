@@ -294,8 +294,8 @@
   --o-backdrop:  rgba(5, 5, 8, 0.55);
 
   --o-text:   #e3e3e9;
-  --o-text-2: #9d9da8;
-  --o-text-3: #888893;   /* ≥4.5:1 on the translucent surface over the dark gradient (AA) — was #767684 (3.70:1) */
+  --o-text-2: #c1c1cc;   /* cycle-2 pixel-verified: ≥5.9:1 on chip/badge surface rgb(61,61,67) — was #9d9da8 (4.02:1, flagged) */
+  --o-text-3: #a9a9b4;   /* cycle-2 pixel-verified: ≥4.6:1 on the LIGHTEST real surface (chip rgb(61,61,67)) — was #888893 (3.1:1 chip / 3.53:1 th, flagged) */
 
   --o-border:   rgba(255, 255, 255, 0.10);
   --o-border-2: rgba(255, 255, 255, 0.20);
@@ -338,7 +338,7 @@
 
   --o-text:   #16161c;
   --o-text-2: #3c3c46;
-  --o-text-3: #53535c;   /* ≥4.5:1 on the translucent surface over the light gradient (AA) — was #62626a (4.03:1) */
+  --o-text-3: #46464f;   /* cycle-2 pixel-verified: ≥4.7:1 on the raw light gradient rgb(179,180,195) (sidebar caption 3.71:1, flagged) — was #53535c */
 
   --o-border:   rgba(22, 22, 28, 0.16);
   --o-border-2: rgba(22, 22, 28, 0.30);

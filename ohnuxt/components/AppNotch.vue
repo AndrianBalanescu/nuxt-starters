@@ -159,6 +159,7 @@ function handleReset() {
 .hardware-notch {
   position: fixed;
   top: 0;
+  top: env(safe-area-inset-top, 0px); /* mobile: clear the OS status bar; desktop env() = 0px (flush, QA-02 assert intact) */
   left: 50%;
   transform: translateX(-50%);
   z-index: 99999 !important;
@@ -218,8 +219,9 @@ function handleReset() {
 }
 
 .notch-icon-btn {
-  height: 22px !important;
-  width: 22px !important;
+  /* 24x24 minimum: WCAG 2.5.8 target size (was 22x22) */
+  height: 24px !important;
+  width: 24px !important;
   padding: 0 !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -302,6 +304,6 @@ function handleReset() {
 
 .popover-btn:hover {
   background: var(--o-surface-2);
-  color: var(--o-accent);
+  color: var(--o-accent-text);
 }
 </style>

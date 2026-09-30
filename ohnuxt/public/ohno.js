@@ -33,6 +33,7 @@
    * [data-theme] [data-palette] [data-contrast] on <html>
    * persisted to localStorage; fires "ohno:themechange".
    * one writer: put(attr, save, val) */
+  let uid = 0; // per-instance id counter (select listboxes, …)
   const ROOT = d.documentElement,
     /* Theme = structural identity. Neutral is the unadorned base; dark/light
        are Faces only and never appear as structural theme choices. */
@@ -41,7 +42,6 @@
     PALETTES = ["indigo", "ember", "forest", "mono"],
     CONTRASTS = ["low", "med", "high"],
     DENSITIES = ["dense", "regular", "large"],
-    uid = 0, // per-instance id counter (select listboxes, …)
     store = (k, v) => {
       try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (_) {}
     },
@@ -1273,8 +1273,15 @@
      Idempotent via _ohno* guards on instances + delegated document listeners. */
   const OHNO = { toast, theme, fonts, openModal, closeModal, loading, notch: null, init: init, scan: init };
 
-  if (d.readyState === "loading") on(d, "DOMContentLoaded", () => init());
-  else init();
+  /* Standalone usage self-inits (DOMContentLoaded or immediately). Nuxt
+     integrations set window.__OHNO_DEFER_INIT__ from an inline head script
+     before this file runs: pre-hydration init mutates Vue-owned DOM (select
+     wrapping) and triggers hydration mismatches. The app's plugin calls
+     OHNO.scan() post-hydration instead. */
+  if (!window.__OHNO_DEFER_INIT__) {
+    if (d.readyState === "loading") on(d, "DOMContentLoaded", () => init());
+    else init();
+  }
 
   window.OHNO = OHNO;
 })();

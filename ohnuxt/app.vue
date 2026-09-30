@@ -29,6 +29,13 @@ useHead(() => ({
     ...fontLinks.value
   ],
   script: [
+    // ohno.js self-inits as soon as it executes (defer → before Vue
+    // hydrates) and initSelects() wraps <select> in extra divs — mutating
+    // Vue-owned DOM pre-hydration logs "Hydration completed but contains
+    // mismatches" on any page containing a select. Flag it into manual
+    // mode; plugins/ohno.client.ts owns scanning (app:suspense:resolve +
+    // page:finish, both gated on !nuxtApp.isHydrating).
+    { innerHTML: 'window.__OHNO_DEFER_INIT__ = 1' },
     { src: '/ohno.js', defer: true }
   ]
 }))

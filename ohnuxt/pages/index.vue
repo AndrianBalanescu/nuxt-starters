@@ -155,7 +155,7 @@ useSeoMeta({
           <span class="icon-left">
             <Search :size="13" />
           </span>
-          <input class="input" style="height: 28px; font-size: 11px;" v-model="searchFilter" placeholder="Filter node or region…">
+          <input class="input" style="height: 28px; font-size: 11px;" v-model="searchFilter" placeholder="Filter node or region…" aria-label="Filter node or region">
         </div>
       </div>
 

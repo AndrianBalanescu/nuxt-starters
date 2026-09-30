@@ -856,7 +856,7 @@ input[type="range"]:not([class])::-moz-range-thumb:hover,
 }
 .menu-item.is-selected {
   background: var(--o-accent-soft);
-  color: var(--o-accent);
+  color: var(--o-accent-text);
 }
 .menu-item.is-disabled {
   opacity: 0.45;
@@ -994,7 +994,7 @@ input[type="range"]:not([class])::-moz-range-thumb:hover,
 .select-option.is-active { background: var(--o-surface-2); }
 .select-option.is-selected {
   background: var(--o-accent-soft);
-  color: var(--o-accent);
+  color: var(--o-accent-text);
 }
 .select-option.is-selected::after {
   content: "✓";
@@ -1025,6 +1025,7 @@ input[type="range"]:not([class])::-moz-range-thumb:hover,
   white-space: nowrap;
 }
 .chip-remove {
+  position: relative; /* hit-area: 24x24 WCAG 2.5.8 circle via ::before (visual stays 14px) */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1038,6 +1039,11 @@ input[type="range"]:not([class])::-moz-range-thumb:hover,
   cursor: pointer;
   transition: background var(--o-dur-quick-1) var(--o-ease),
               color var(--o-dur-quick-1) var(--o-ease);
+}
+.chip-remove::before {
+  content: '';
+  position: absolute;
+  inset: -5px; /* 14 + 5 + 5 = 24 */
 }
 .chip-remove:hover {
   background: var(--o-red-soft);
@@ -1402,7 +1408,7 @@ dialog.palette.is-closing::backdrop { opacity: 0; }
   font-weight: 600;
 }
 .nav-item svg { flex-shrink: 0; color: var(--o-text-3); }
-.nav-item.is-active svg { color: var(--o-accent); }
+.nav-item.is-active svg { color: var(--o-accent-text); }
 .nav-item .badge { margin-left: auto; }
 
 .sidebar-footer {
@@ -1457,7 +1463,7 @@ html.drawer-lock {
 }
 .tab:hover { color: var(--o-text); }
 .tab.is-active {
-  color: var(--o-accent);
+  color: var(--o-accent-text);
   border-bottom-color: var(--o-accent);
 }
 
@@ -1921,8 +1927,8 @@ pre:not([class]) > code {
 
 /* Swatch — palette color picker dot */
 .swatch {
-  width: 22px;
-  height: 22px;
+  width: 24px; /* WCAG 2.5.8 minimum target (was 22) */
+  height: 24px;
   border-radius: var(--o-r-full);
   border: 2px solid transparent;
   outline: 1px solid var(--o-border-2);
@@ -2074,7 +2080,7 @@ details:not([class]) > p:not(:last-child) {
 /* active pick inside the appearance popover (theme/palette/contrast/density) */
 .ohno-notch .notch-btn.is-active,
 .popover .swatch.is-active { border-color: var(--o-text); box-shadow: var(--o-ring); }
-.ohno-notch .notch-btn.is-active { background: var(--o-accent-soft); color: var(--o-accent); }
+.ohno-notch .notch-btn.is-active { background: var(--o-accent-soft); color: var(--o-accent-text); }
 .ohno-notch a svg,
 .ohno-notch button svg { width: 15px; height: 15px; }
 

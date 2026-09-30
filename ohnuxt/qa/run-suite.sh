@@ -10,6 +10,7 @@
 #   Usage:
 #     IBROWSE_API_KEY=sk_live_... ./run-suite.sh            # run everything
 #     QA_DRY_RUN=1 ./run-suite.sh                           # print payloads only
+#     QA_FILTER=02 ./run-suite.sh                           # only configs matching substring
 #     QA_BASE_URL=http://172.17.0.1:3333 ./run-suite.sh     # override target
 #
 # Contract (from the iBrowse skill, live-verified):
@@ -34,6 +35,7 @@ IBROWSE_API_KEY="${IBROWSE_API_KEY:?Set IBROWSE_API_KEY to your iBrowse bridge k
 QA_PRESET="${QA_PRESET:-qa}"
 QA_POLL_SECONDS="${QA_POLL_SECONDS:-6}"
 QA_DRY_RUN="${QA_DRY_RUN:-0}"
+QA_FILTER="${QA_FILTER:-}"
 QA_CONCURRENCY="${QA_CONCURRENCY:-1}" # runs are polled serially for now
 
 command -v jq >/dev/null 2>&1 || { echo "jq is required" >&2; exit 2; }
@@ -46,6 +48,18 @@ QA_FILES=("$QA_DIR"/*.json)
 if [ ! -f "${QA_FILES[0]}" ]; then
   echo "No QA configs found in $QA_DIR" >&2
   exit 2
+fi
+if [ -n "$QA_FILTER" ]; then
+  # bash 3.2-safe: never expand an empty array under `set -u`.
+  FILTERED=()
+  for _f in "${QA_FILES[@]}"; do
+    case "$(basename "$_f")" in *"$QA_FILTER"*) FILTERED+=("$_f") ;; esac
+  done
+  if [ "${#FILTERED[@]}" -eq 0 ]; then
+    echo "No configs match QA_FILTER=$QA_FILTER" >&2
+    exit 2
+  fi
+  QA_FILES=("${FILTERED[@]}")
 fi
 
 echo "========================================================"

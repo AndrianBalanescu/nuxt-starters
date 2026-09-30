@@ -346,7 +346,7 @@ const route = useRoute()
 }
 
 .nav-item.is-active {
-  color: var(--o-accent);
+  color: var(--o-accent-text);
   background: var(--o-accent-soft, rgba(113, 116, 212, 0.14));
   font-weight: 600;
 }

@@ -345,8 +345,8 @@ const fontTips: Record<FontFamily, string> = {
 }
 
 .close-btn {
-  width: 22px !important;
-  height: 22px !important;
+  width: 24px !important; /* WCAG 2.5.8 minimum target (was 22) */
+  height: 24px !important;
   padding: 0 !important;
   display: inline-flex !important;
   align-items: center !important;
