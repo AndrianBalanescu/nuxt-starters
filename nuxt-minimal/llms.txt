@@ -1,7 +1,7 @@
 # Nuxt Minimal — LLM Agent Contract (llm.txt)
 
 > **For LLM agents generating Nuxt + UnoCSS + Pinia UIs.**
-> This starter is a lean, zero-bloat Nuxt 3 boilerplate. Follow the rules below strictly.
+> This starter is a lean, zero-bloat Nuxt 4 boilerplate. Follow the rules below strictly.
 
 ## 0. Golden Rules
 

@@ -1,9 +1,9 @@
 # Nuxt Minimal — UnoCSS + Pinia Starter
 
-> Lean, high-performance Nuxt 3 starter for agentic development.
+> Lean, high-performance Nuxt 4 starter for agentic development.
 
 ## Stack
-- **Framework:** Nuxt 3.21
+- **Framework:** Nuxt 4.5
 - **CSS:** UnoCSS 66 (Uno, Attributify, Icons, WebFonts presets)
 - **State:** Pinia 4
 - **Icons:** Lucide (via `@unocss/icons`)

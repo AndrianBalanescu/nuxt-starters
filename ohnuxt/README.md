@@ -1,6 +1,6 @@
-# Nuxt 3 · ohno Ultra-Minimal Starter Pack
+# Nuxt 4 · ohno Ultra-Minimal Starter Pack
 
-> **A zero-config-clutter, classless-first Nuxt 3 starter template powered by the ohno design system, Pinia reactive state, Lucide icons, a Raycast-style ⌘K command palette, and an authentic hardware notch.**
+> **A zero-config-clutter, classless-first Nuxt 4 starter template powered by the ohno design system, Pinia reactive state, Lucide icons, a Raycast-style ⌘K command palette, and an authentic hardware notch.**
 
 ---
 

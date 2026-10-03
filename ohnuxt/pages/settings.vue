@@ -12,7 +12,7 @@ function saveSettings() {
 }
 
 useSeoMeta({
-  title: 'Settings · Nuxt 3 + ohno Starter',
+  title: 'Settings · Nuxt 4 + ohno Starter',
   description: 'Manage preferences, notification triggers, and theme settings.'
 })
 </script>

@@ -4,9 +4,9 @@ import { computed } from 'vue'
 const themeStore = useThemeStore()
 
 useSeoMeta({
-  title: 'Nuxt 3 · ohno Starter Pack',
-  description: 'Ultra-lightweight, classless-first Nuxt 3 starter with live token customizer, command palette, and Pinia stores.',
-  ogTitle: 'Nuxt 3 · ohno Starter Pack',
+  title: 'Nuxt 4 · ohno Starter Pack',
+  description: 'Ultra-lightweight, classless-first Nuxt 4 starter with live token customizer, command palette, and Pinia stores.',
+  ogTitle: 'Nuxt 4 · ohno Starter Pack',
   ogDescription: 'Zero config clutter, full semantic design system.'
 })
 
@@ -18,9 +18,9 @@ const fontLinks = computed(() => {
   if (themeStore.font === 'mono') families.push('family=JetBrains+Mono:wght@400;500')
   if (themeStore.font === 'bricolage') families.push('family=Bricolage+Grotesque:opsz,wght@12..96,400..700')
   return [
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' as const },
-    { rel: 'stylesheet', href: `https://fonts.googleapis.com/css2?${families.join('&')}&display=swap` }
+    { rel: 'preconnect' as const, href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect' as const, href: 'https://fonts.gstatic.com', crossorigin: '' as const },
+    { rel: 'stylesheet' as const, href: `https://fonts.googleapis.com/css2?${families.join('&')}&display=swap` }
   ]
 })
 

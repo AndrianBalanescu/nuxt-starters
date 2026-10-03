@@ -13,16 +13,16 @@ useHead({
       <!-- Header -->
       <header class="flex flex-col gap-2">
         <h1 class="text-4xl font-bold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">
-          Nuxt 3 Minimal Starter
+          Nuxt 4 Minimal Starter
         </h1>
         <p class="text-neutral-400">
-          A clean, lean Nuxt 3 boilerplate with <span class="text-emerald-400">UnoCSS</span> and <span class="text-teal-400">Pinia</span>.
+          A clean, lean Nuxt 4 boilerplate with <span class="text-emerald-400">UnoCSS</span> and <span class="text-teal-400">Pinia</span>.
         </p>
       </header>
 
       <!-- Feature Badges -->
       <div class="flex flex-wrap gap-2">
-        <span class="px-3 py-1 rounded-full text-xs bg-emerald-950/50 text-emerald-300 border border-emerald-800">Nuxt 3</span>
+        <span class="px-3 py-1 rounded-full text-xs bg-emerald-950/50 text-emerald-300 border border-emerald-800">Nuxt 4</span>
         <span class="px-3 py-1 rounded-full text-xs bg-teal-950/50 text-teal-300 border border-teal-800">UnoCSS 66</span>
         <span class="px-3 py-1 rounded-full text-xs bg-indigo-950/50 text-indigo-300 border border-indigo-800">Pinia 4</span>
         <span class="px-3 py-1 rounded-full text-xs bg-neutral-900/50 text-neutral-300 border border-neutral-800">Bun</span>

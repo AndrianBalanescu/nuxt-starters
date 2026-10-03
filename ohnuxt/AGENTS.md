@@ -1,4 +1,4 @@
-# AGENTS.md — Nuxt 3 + ohno + Pinia Workspace Rules (BINDING)
+# AGENTS.md — Nuxt 4 + ohno + Pinia Workspace Rules (BINDING)
 
 ## 🛑 MANDATORY: Always Consult `llms.txt` First
 Before adding any custom CSS classes, wrapper components, or inline styles:
@@ -9,7 +9,7 @@ Before adding any custom CSS classes, wrapper components, or inline styles:
 
 ## 1. Stack Contract
 - **Runtime & Package Manager:** `bun` only. Never run `npm` or `pnpm` without explicit instruction.
-- **Framework:** Nuxt 3 with file-based routing (`pages/`) and layouts (`layouts/`).
+- **Framework:** Nuxt 4 with file-based routing (`pages/`) and layouts (`layouts/`).
 - **Styling & Design System:** **ohno** classless-first UI kit (`assets/css/{tokens,base,components,customizer}.css`).
   - *Hard Rule:* Use ohno CSS custom properties (`--o-bg`, `--o-surface`, `--o-text`, `--o-border`, `--o-accent`, `--o-s1`..`--o-s8`, `--o-r-sm`..`--o-r-lg`, `--o-shadow-md`).
   - *Cascade Rule:* Respect `@layer tokens, base, components`. Do NOT write rogue unlayered `<style scoped>` that collide with tokens.

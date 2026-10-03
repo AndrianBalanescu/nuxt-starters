@@ -59,7 +59,7 @@ function triggerLoading() {
 }
 
 useSeoMeta({
-  title: 'Component Showcase · Nuxt 3 + ohno Starter',
+  title: 'Component Showcase · Nuxt 4 + ohno Starter',
   description: 'Complete suite of reusable buttons, forms, tables, side panels, and bottom sheets.'
 })
 </script>

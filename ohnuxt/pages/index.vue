@@ -41,7 +41,7 @@ const filteredProbes = computed(() => {
 })
 
 useSeoMeta({
-  title: 'Dashboard · Nuxt 3 + ohno Starter',
+  title: 'Dashboard · Nuxt 4 + ohno Starter',
   description: 'Production-ready dashboard with live KPI metrics, side panels, and bottom drawers.'
 })
 </script>

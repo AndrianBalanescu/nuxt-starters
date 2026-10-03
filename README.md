@@ -1,13 +1,13 @@
 # Nuxt Starters Workspace
 
-Workspace containing two production-ready Nuxt 3 starters for agentic development.
+Workspace containing two production-ready Nuxt 4 starters for agentic development.
 
 ## Starters
 
 | Project | Stack | Best for |
 |---|---|---|
-| [`nuxt-minimal`](./nuxt-minimal) | Nuxt 3 + UnoCSS + Pinia 4 + Lucide | Lean dashboards, landing pages, minimal admin apps |
-| [`ohnuxt`](./ohnuxt) | Nuxt 3 + ohno v4 + Pinia + VueUse + Lucide | Full app kits with ⌘K command palette, hardware notch, live theming |
+| [`nuxt-minimal`](./nuxt-minimal) | Nuxt 4 + UnoCSS + Pinia 4 + Lucide | Lean dashboards, landing pages, minimal admin apps |
+| [`ohnuxt`](./ohnuxt) | Nuxt 4 + ohno v4 + Pinia + VueUse + Lucide | Full app kits with ⌘K command palette, hardware notch, live theming |
 
 ## Install (any fresh machine / VM)
 

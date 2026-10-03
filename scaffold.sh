@@ -7,8 +7,8 @@
 # Usage (from any terminal, any cwd):
 #   nux-scaffold <project-name> [--lean] [--appkit] [--no-install]
 #
-#   --lean        Copy nuxt-minimal (Nuxt 3 + UnoCSS + Pinia)
-#   --appkit      Copy ohnuxt (Nuxt 3 + ohno UI + Pinia + VueUse)
+#   --lean        Copy nuxt-minimal (Nuxt 4 + UnoCSS + Pinia)
+#   --appkit      Copy ohnuxt (Nuxt 4 + ohno UI + Pinia + VueUse)
 #   (no flag)     Copy both starters
 #   --no-install  Skip the automatic `bun install`
 #
@@ -36,8 +36,8 @@ TARGET="${1:-}"
 
 if [ -z "$TARGET" ]; then
   echo "Usage: nux-scaffold <project-name> [--lean] [--appkit] [--no-install]"
-  echo "  --lean        nuxt-minimal (Nuxt 3 + UnoCSS + Pinia)"
-  echo "  --appkit      ohnuxt (Nuxt 3 + ohno UI + Pinia + VueUse)"
+  echo "  --lean        nuxt-minimal (Nuxt 4 + UnoCSS + Pinia)"
+  echo "  --appkit      ohnuxt (Nuxt 4 + ohno UI + Pinia + VueUse)"
   echo "  (none)        both starters"
   echo "  --no-install  skip bun install"
   echo ""

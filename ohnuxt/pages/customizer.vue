@@ -20,7 +20,7 @@ function handleResetAll() {
 }
 
 useSeoMeta({
-  title: 'Design Customizer · Nuxt 3 + ohno Starter',
+  title: 'Design Customizer · Nuxt 4 + ohno Starter',
   description: 'Tweak design tokens live on real UI components with Pinia reactivity and zero config clutter.'
 })
 </script>
