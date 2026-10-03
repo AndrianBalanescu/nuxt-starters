@@ -136,7 +136,7 @@ useSeoMeta({
         <span class="badge badge-warning"><span class="badge-dot"></span>Warning</span>
         <span class="badge badge-danger"><span class="badge-dot"></span>Failed</span>
         
-        <span class="chip">nuxt-3 <button type="button" class="chip-remove" @click="toast.info('Removed chip')">×</button></span>
+        <span class="chip">nuxt-4 <button type="button" class="chip-remove" @click="toast.info('Removed chip')">×</button></span>
         <span class="chip">ohno-ui <button type="button" class="chip-remove" @click="toast.info('Removed chip')">×</button></span>
         <span class="chip">pinia-store <button type="button" class="chip-remove" @click="toast.info('Removed chip')">×</button></span>
 
